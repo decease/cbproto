@@ -21,6 +21,9 @@ export default class Pie extends Component {
         position: 'aboveChartRight',
         wordWrap: true
       },
+      animateY: {
+          duration: 500
+      },
       usePercentValues: true,
       valueFormatter: {
         type: 'regular',

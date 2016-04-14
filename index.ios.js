@@ -4,11 +4,7 @@
  */
 
 import React, {
-  AppRegistry,
-  Component,
-  StyleSheet,
-  Text,
-  View
+  AppRegistry
 } from 'react-native';
 
 import CBApp from './components/CBApp';

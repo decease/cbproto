@@ -4,45 +4,41 @@ import React, {
   ScrollView,
   StyleSheet,
   ToolbarAndroid,
+  Platform,
   View,
   Text
 } from 'react-native';
 
-import RiskFactors from './scenes/RiskFactors';
+import CBTabsView from './CBTabsView';
 
 class CBNAvigator extends Component {
   render() {
     return (
       <Navigator
-          initialRoute={{title: "CB Title test"}}
-          navigationBar={<ToolbarAndroid title="CB Test" />}
+          ref="navigator"
+          style={styles.container}
+          initialRoute={{}}
           configureScene={() => {
-            return Navigator.SceneConfigs.FadeAndroid;
+            if (Platform.OS === 'android') {
+              return Navigator.SceneConfigs.FloatFromBottomAndroid;
+            } else {
+              return Navigator.SceneConfigs.FloatFromBottom;
+            }
           }}
-          renderScene={(route) => this.renderScene(route)}
+          renderScene={this.renderScene}
       />
     );
   }
   
-  renderScene(route) {
-    return (
-            <View
-              style={styles.container}
-             >
-                <RiskFactors />
-            </View>
-          );
+  renderScene(route, navigator) {
+    return <CBTabsView navigator={navigator} />;
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    backgroundColor: 'white',
-    padding: 20,
-    paddingTop: 30,
-    paddingBottom: 30
+    backgroundColor: 'white'
   }
 });
 
