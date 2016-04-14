@@ -2,11 +2,13 @@
 import { AsyncStorage } from 'react-native';
 import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
-import reducers from '../reducers/index';
+import reducers from '../reducers';
 
 var isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
 
 const configureStore = () => {
+  console.log(reducers);  
+  
   const store = createStore(
       reducers,
       applyMiddleware(thunk)

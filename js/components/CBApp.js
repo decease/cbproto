@@ -1,5 +1,6 @@
 import React, {
     Component,
+    AppState,
     StyleSheet,
     StatusBar,
     View,
