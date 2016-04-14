@@ -7,7 +7,10 @@ import React, {
   View
 } from 'react-native';
 
+import { connect } from 'react-redux';
+
 import RiskFactors from './scenes/RiskFactors';
+import Home from './scenes/Home';
 import CBDrawerLayout from './common/CBDrawerLayout';
 import MenuItem from './common/MenuItem';
 import ProfilePicture from './common/ProfilePicture';
@@ -25,6 +28,8 @@ class CBTabsView extends Component {
     //const { tab } = this.props;
     const tab = 'risks';
     switch (tab) {
+      case 'home':
+        return <Home navigator={this.props.navigator} />;
       case 'risks':
         return <RiskFactors navigator={this.props.navigator} />;
     }

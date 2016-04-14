@@ -21,6 +21,8 @@ const setup = () => {
       if (this.state.isLoading) {
         return null;
       }
+      
+      console.log(this.state.store.getState());
       return (
         <Provider store={this.state.store}>
           <CBApp />

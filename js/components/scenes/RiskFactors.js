@@ -7,7 +7,7 @@ import React, {
 
 import PieChart from '../mpchart/PieChart';
 
-export default class Pie extends Component {
+class RiskFactors extends Component {
   render() {
     const config = {
       dataSets: [{
@@ -16,7 +16,7 @@ export default class Pie extends Component {
         label: ""
       }],
       labels: ['Smoking', 'Body Mass Index', 'Alcohole Intake', 'High Blood Pressure'],
-      centerText: 'Relative Contribution of Risk Factors',
+      centerText: 'Risk Factors',
       legend: {
         position: 'aboveChartRight',
         wordWrap: true
@@ -33,8 +33,7 @@ export default class Pie extends Component {
     };
 
     return (
-        <View style={{flex: 1, width: 300}}>
-            <Text>RiskFactors</Text>
+        <View style={{flex: 1}}>
             <PieChart style={styles.container} config={config} />
         </View>
        );
@@ -49,3 +48,5 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent'
   }
 });
+
+export default RiskFactors;
