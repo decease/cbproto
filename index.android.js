@@ -8,14 +8,6 @@ import React, {
   Component,
 } from 'react-native';
 
-import App from './components/App';
+import CBApp from './components/CBApp';
 
-class cbproto extends Component {
-  render() {
-    return (
-      <App></App>
-    );
-  }
-}
-
-AppRegistry.registerComponent('cbproto', () => cbproto);
+AppRegistry.registerComponent('cbproto', () => CBApp);

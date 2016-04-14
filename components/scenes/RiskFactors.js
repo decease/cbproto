@@ -5,7 +5,7 @@ import React, {
     Text
 } from 'react-native';
 
-import PieChart from './mpchart/PieChart';
+import PieChart from '../mpchart/PieChart';
 
 export default class Pie extends Component {
   render() {
@@ -29,7 +29,12 @@ export default class Pie extends Component {
       }
     };
 
-    return <PieChart style={styles.container} config={config} />;
+    return (
+        <View style={{flex: 1, width: 300}}>
+            <Text>RiskFactors</Text>
+            <PieChart style={styles.container} config={config} />
+        </View>
+       );
   }
 }
 
