@@ -12,16 +12,11 @@ const setup = () => {
     constructor() {
       super();
       this.state = {
-        isLoading: true,
-        store: configureStore(() => this.setState({isLoading: false}))
+        store: configureStore()
       };
     }
     
-    render() {
-      if (this.state.isLoading) {
-        return null;
-      }
-      
+    render() {    
       console.log(this.state.store.getState());
       return (
         <Provider store={this.state.store}>
