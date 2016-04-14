@@ -7,6 +7,6 @@ import React, {
   AppRegistry
 } from 'react-native';
 
-import CBApp from './js/setup';
+import setup from './js/setup';
 
-AppRegistry.registerComponent('cbproto', () => setup);
+AppRegistry.registerComponent('cbproto', setup);
