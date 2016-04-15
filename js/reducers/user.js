@@ -8,6 +8,8 @@ const initialState = {
 
 function user(state = initialState, action) {
   if (action.type === 'LOGGED_IN') {
+    console.log("action 'LOGGED_IN'");
+    
     let {id, name} = action.data;
     return {
       isLoggedIn: true,

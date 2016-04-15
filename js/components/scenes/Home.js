@@ -5,15 +5,21 @@ import React, {
     Text
 } from 'react-native';
 
+import { connect } from 'react-redux';
+
 class Home extends Component {
   render() {
     return (
-        <View style={{flex: 1}}>
-            <Text>Home</Text>
+        <View style={styles.container}>
+            <Text style={{flex: 1, alignSelf: 'center'}}>Welcome, {this.props.user.name}</Text>
         </View>
        );
   }
 }
+
+const select = (store) => ({
+  user: store.user,
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -24,4 +30,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default Home;
+export default connect(select)(Home);;

@@ -6,8 +6,8 @@ import React, {
 } from 'react-native';
 
 class CBDrawerLayout extends Component {
-  _drawer: ?DrawerLayoutAndroid;
-
+  _drawer = null;
+  
   render() {
     const {drawerPosition, ...props} = this.props;
     const {Right, Left} = DrawerLayoutAndroid.positions;
@@ -23,12 +23,24 @@ class CBDrawerLayout extends Component {
     );
   }
 
+  componentWillUnmount() {
+    this._drawer = null;
+  }
+
   onDrawerOpen() {
     this.props.onDrawerOpen && this.props.onDrawerOpen();
   }
 
   onDrawerClose() {
     this.props.onDrawerClose && this.props.onDrawerClose();
+  }
+  
+  closeDrawer() {
+    this._drawer && this._drawer.closeDrawer();
+  }
+
+  openDrawer() {
+    this._drawer && this._drawer.openDrawer();
   }
 }
 

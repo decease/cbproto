@@ -15,6 +15,7 @@ import CBDrawerLayout from './common/CBDrawerLayout';
 import MenuItem from './common/MenuItem';
 import ProfilePicture from './common/ProfilePicture';
 
+import { switchTab, logOut } from '../actions';
 
 class CBTabsView extends Component {
   onTabSelect(tab) {
@@ -24,9 +25,13 @@ class CBTabsView extends Component {
     this.refs.drawer.closeDrawer();
   }
 
+  onLogOut() {
+    this.props.logOut();
+    this.refs.drawer.closeDrawer();
+  }
+
   renderContent() {
-    //const { tab } = this.props;
-    const tab = 'risks';
+    const { tab } = this.props;
     switch (tab) {
       case 'home':
         return <Home navigator={this.props.navigator} />;
@@ -61,8 +66,10 @@ class CBTabsView extends Component {
           title="My Risks"
           selected={this.props.tab === 'risks'}
           onPress={this.onTabSelect.bind(this, 'risks') }
-          //icon={risksIcon}
-          //selectedIcon={risksIconSelected}
+          />
+        <MenuItem
+          title="Log out"
+          onPress={this.onLogOut.bind(this) }
           />
       </View>
     );
@@ -81,6 +88,20 @@ class CBTabsView extends Component {
       </CBDrawerLayout>
     );
   }
+}
+
+function select(store) {
+  return {
+    tab: store.navigation.tab,
+    user: store.user,
+  };
+}
+
+function actions(dispatch) {
+  return {
+    onTabSelect: (tab) => dispatch(switchTab(tab)),
+    logOut: () => dispatch(logOut()),
+  };
 }
 
 var styles = StyleSheet.create({
@@ -102,4 +123,4 @@ var styles = StyleSheet.create({
   }
 });
 
-export default CBTabsView;
+export default connect(select, actions)(CBTabsView);

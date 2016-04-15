@@ -7,7 +7,8 @@ import configureStore from './store/configureStore';
 import CBApp from './components/CBApp';
 
 const setup = () => {
-  
+  console.disableYellowBox = true;
+
   class Root extends Component {
     constructor() {
       super();

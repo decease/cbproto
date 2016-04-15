@@ -3,4 +3,4 @@ const switchTab = (tab) => ({
   tab
 });
 
-export default { switchTab };
+export { switchTab };

@@ -26,6 +26,8 @@ class LoginScreen extends Component {
   }
 
   render() {
+    console.log(this.props.user);
+    
     return (
       <Image
         style={styles.container}
@@ -126,7 +128,8 @@ var styles = StyleSheet.create({
     
   },
   input: {
-    fontSize: 16
+    fontSize: 16,
+    color: 'rgb(124,122,135)'
   },
   loginButton: {
     backgroundColor: '#00BFF3',
@@ -134,4 +137,4 @@ var styles = StyleSheet.create({
   }
 });
 
-module.exports = connect()(LoginScreen);
+export default connect()(LoginScreen);
