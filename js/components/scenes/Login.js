@@ -1,27 +1,28 @@
-var Animated = require('Animated');
-var Dimensions = require('Dimensions');
-var Image = require('Image');
-var React = require('React');
-var StatusBarIOS = require('StatusBarIOS');
-var StyleSheet = require('StyleSheet');
-var View = require('View');
-var Text = require('Text');
+import React, {
+  Image,
+  Component,
+  Dimensions,
+  StatusBarIOS,
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity
+} from 'react-native';
 
-var TouchableOpacity = require('TouchableOpacity');
+import Button from 'apsl-react-native-button'
+import { connect } from 'react-redux';
+import { logInWithOAuth } from '../../actions';
 
-var { connect } = require('react-redux');
-
-class LoginScreen extends React.Component {
+class LoginScreen extends Component {
   constructor(props) {
     super(props);
+    
     this.state = {
-      anim: new Animated.Value(0),
+      isLoading: false,
+      username: 'ann.smith',
+      password: 'Hell@123'
     };
-  }
-
-  componentDidMount() {
-    StatusBarIOS && StatusBarIOS.setStyle('default');
-    Animated.timing(this.state.anim, {toValue: 3000, duration: 3000}).start();
   }
 
   render() {
@@ -31,39 +32,56 @@ class LoginScreen extends React.Component {
         source={require('../img/login-background.png')}
         >
         <View style={styles.section}>
-          <Animated.Text style={[styles.h1, this.fadeIn(700, -20)]}>
-            Carebook
-          </Animated.Text>
-          <Animated.Text style={[styles.h2, this.fadeIn(1000, 10)]}>
-            The quality of your family's healthcare is now in the best hands...yours.
-          </Animated.Text>
+          <Image source={require('../img/logo.png')}>
+          </Image>
         </View>
-        <Animated.View style={[styles.section, styles.last, this.fadeIn(2500, 20)]}>
-          <Text style={styles.loginComment}>
-            Carebook Inc.
-          </Text>
-          
-        </Animated.View>
+        <View style={styles.loginForm}>
+          <TextInput
+              style={styles.input}
+              underlineColorAndroid='rgba(124,122,135,0.3)'
+              onChangeText={(text) => this.setState({username: text})}
+              value={this.state.username}
+            />
+          <TextInput
+              style={styles.input}
+              secureTextEntry={true}
+              underlineColorAndroid='rgba(124,122,135,0.3)'
+              onChangeText={(text) => this.setState({password: text})}
+              value={this.state.password}
+            />
+        </View>
+        <View style={styles.section}>
+          <Button
+            style={styles.loginButton}
+            textStyle={{color: '#FFFDFE'}}
+            onPress={this.login.bind(this)}
+            isLoading={this.state.isLoading} 
+          >
+          Sign In
+          </Button>
+        </View>
       </Image>
     );
   }
+  
+  async login() {
+    const {dispatch} = this.props;
+    const {username, password} = this.state;
 
-  fadeIn(delay, from = 0) {
-    const {anim} = this.state;
-    return {
-      opacity: anim.interpolate({
-        inputRange: [delay, Math.min(delay + 500, 3000)],
-        outputRange: [0, 1],
-        extrapolate: 'clamp',
-      }),
-      transform: [{
-        translateY: anim.interpolate({
-          inputRange: [delay, Math.min(delay + 500, 3000)],
-          outputRange: [from, 0],
-          extrapolate: 'clamp',
-        }),
-      }],
-    };
+    this.setState({isLoading: true});
+ 
+    try {
+      await dispatch(logInWithOAuth(username, password));
+    } catch (e) {
+      const message = e.message || e;
+      if (message !== 'Timed out' && message !== 'Canceled by user') {
+        alert(message);
+        console.warn(e);
+      }
+      return;
+    } finally {
+      this.setState({isLoading: false});
+    }
   }
 }
 
@@ -74,8 +92,6 @@ var styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'transparent',
     padding: 26,
-    // Image's source contains explicit size, but we want
-    // it to prefer flex: 1
     width: undefined,
     height: undefined,
   },
@@ -106,18 +122,16 @@ var styles = StyleSheet.create({
     color: '#7F91A7',
     letterSpacing: 1,
   },
-  loginComment: {
-    marginBottom: 14,
-    fontSize: 12,
-    color: '#032250',
-    textAlign: 'center',
+  loginForm: {
+    
   },
-  skip: {
-    position: 'absolute',
-    right: 0,
-    top: 20,
-    padding: 15,
+  input: {
+    fontSize: 16
   },
+  loginButton: {
+    backgroundColor: '#00BFF3',
+    borderColor: '#FFFFFF'
+  }
 });
 
 module.exports = connect()(LoginScreen);

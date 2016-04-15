@@ -8,14 +8,9 @@ const initialState = {
 
 function user(state = initialState, action) {
   if (action.type === 'LOGGED_IN') {
-    let {id, name, sharedSchedule} = action.data;
-    if (sharedSchedule === undefined) {
-      sharedSchedule = null;
-    }
+    let {id, name} = action.data;
     return {
       isLoggedIn: true,
-      hasSkippedLogin: false,
-      sharedSchedule,
       id,
       name,
     };
