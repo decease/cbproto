@@ -16,7 +16,7 @@ class RiskFactors extends Component {
         label: ""
       }],
       labels: ['Smoking', 'Body Mass Index', 'Alcohole Intake', 'High Blood Pressure'],
-      centerText: 'Risk Factors',
+      centerText: 'Relative Contribution of Risk Factors',
       legend: {
         position: 'aboveChartRight',
         wordWrap: true

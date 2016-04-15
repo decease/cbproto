@@ -26,8 +26,8 @@ class CBTabsView extends Component {
   }
 
   onLogOut() {
-    this.props.logOut();
     this.refs.drawer.closeDrawer();
+    this.props.logOut();
   }
 
   renderContent() {
@@ -63,14 +63,19 @@ class CBTabsView extends Component {
           {accountItem}
         </Image>
         <MenuItem
+          title="Home"
+          selected={this.props.tab === 'home'}
+          onPress={this.onTabSelect.bind(this, 'home') }
+         />
+        <MenuItem
           title="My Risks"
           selected={this.props.tab === 'risks'}
           onPress={this.onTabSelect.bind(this, 'risks') }
-          />
+         />
         <MenuItem
           title="Log out"
           onPress={this.onLogOut.bind(this) }
-          />
+         />
       </View>
     );
   }
