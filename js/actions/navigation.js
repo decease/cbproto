@@ -3,4 +3,10 @@ const switchTab = (tab) => ({
   tab
 });
 
-export { switchTab };
+const switchChart = (chartId) => ({
+  type: 'SWITCH_CHART',
+  tab: 'charts',
+  chartId
+})
+
+export { switchTab, switchChart };

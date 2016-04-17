@@ -5,6 +5,10 @@ function navigation(state = initialState, action) {
         return {...state, tab: action.tab};
     }
     
+    if (action.type === 'SWITCH_CHART') {
+        return {...state, chartId: action.chartId};
+    }
+    
     if (action.type === 'LOGGED_OUT') {
         return initialState;
     }

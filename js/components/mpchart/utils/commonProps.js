@@ -4,12 +4,13 @@ export const commonDataSetProps = {
   values: React.PropTypes.arrayOf(React.PropTypes.number).isRequired,
   label: React.PropTypes.string,
   colors: React.PropTypes.arrayOf(React.PropTypes.string),
-  drawValues: React.PropTypes.bool,
-  highlightEnabled: React.PropTypes.bool,
-  valueTextFontName: React.PropTypes.string,
-  valueTextFontSize: React.PropTypes.number,
-  valueTextColor: React.PropTypes.string,
-  axisDependency: React.PropTypes.oneOf(['left', 'right'])
+  
+  // drawValues: React.PropTypes.bool,
+  // highlightEnabled: React.PropTypes.bool,
+  // valueTextFontName: React.PropTypes.string,
+  // valueTextFontSize: React.PropTypes.number,
+  // valueTextColor: React.PropTypes.string,
+  // axisDependency: React.PropTypes.oneOf(['left', 'right'])
 };
 
 export const globalCommonProps = {

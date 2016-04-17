@@ -14,7 +14,7 @@ function logInWithOAuth(username, password) {
       };
       
       return new Promise((resolve) => {
-         setTimeout(() => resolve(dispatch(action)), 3000);
+         setTimeout(() => resolve(dispatch(action)), 1000);
       });
   };
 }

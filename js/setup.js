@@ -17,7 +17,7 @@ const setup = () => {
       };
     }
     
-    render() {    
+    render() {
       console.log(this.state.store.getState());
       return (
         <Provider store={this.state.store}>

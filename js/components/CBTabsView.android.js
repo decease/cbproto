@@ -10,6 +10,7 @@ import React, {
 import { connect } from 'react-redux';
 
 import RiskFactors from './scenes/RiskFactors';
+import Charts from './charts/Charts';
 import Home from './scenes/Home';
 import CBDrawerLayout from './common/CBDrawerLayout';
 import MenuItem from './common/MenuItem';
@@ -37,6 +38,8 @@ class CBTabsView extends Component {
         return <Home navigator={this.props.navigator} />;
       case 'risks':
         return <RiskFactors navigator={this.props.navigator} />;
+      case 'charts':
+        return <Charts navigator={this.props.navigator} />;
     }
     throw new Error(`Unknown tab ${this.props.tab}`);
   }
@@ -71,6 +74,11 @@ class CBTabsView extends Component {
           title="My Risks"
           selected={this.props.tab === 'risks'}
           onPress={this.onTabSelect.bind(this, 'risks') }
+         />
+        <MenuItem
+          title="Charts"
+          selected={this.props.tab === 'charts'}
+          onPress={this.onTabSelect.bind(this, 'charts') }
          />
         <MenuItem
           title="Log out"

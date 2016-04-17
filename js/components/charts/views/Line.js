@@ -5,9 +5,9 @@ import React, {
     Text
 } from 'react-native';
 
-import PieChart from '../mpchart/MPPieChart';
+import MPPieChart from '../../mpchart/MPPieChart';
 
-class RiskFactors extends Component {
+class PieView extends Component {
   render() {
     const config = {
       dataSets: [{
@@ -32,11 +32,13 @@ class RiskFactors extends Component {
       }
     };
 
-    return (
-        <View style={{flex: 1}}>
-            <PieChart style={styles.container} config={config} />
-        </View>
-       );
+    return (<Text>Line!!!!</Text>);
+
+    // return (
+    //     <View style={{flex: 1}}>
+    //         <MPPieChart style={styles.container} config={config} />
+    //     </View>
+    //    );
   }
 }
 
@@ -49,4 +51,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default RiskFactors;
+export default PieView;
