@@ -12,8 +12,8 @@ class RiskFactors extends Component {
     const config = {
       dataSets: [{
         values: [0.14, 0.14, 0.34, 0.38],
-        colors: ['#C5FF8C', '#FFF78C', '#FFD28D', '#8CEBFF'],
-        label: ""
+        colors: ['rgb(197, 255, 140)', 'rgb(255, 247, 140)', 'rgb(255, 210, 141)', 'rgb(140, 235, 255)'],
+        label: "Quarter Revenues 2014"
       }],
       labels: ['Smoking', 'Body Mass Index', 'Alcohole Intake', 'High Blood Pressure'],
       centerText: 'Relative Contribution of Risk Factors',
@@ -21,10 +21,6 @@ class RiskFactors extends Component {
         position: 'aboveChartRight',
         wordWrap: true
       },
-      animateY: {
-          duration: 500
-      },
-      usePercentValues: true,
       valueFormatter: {
         type: 'regular',
         numberStyle: 'PercentStyle',
