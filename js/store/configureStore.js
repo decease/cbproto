@@ -2,18 +2,25 @@
 import { AsyncStorage } from 'react-native';
 import { applyMiddleware, createStore } from 'redux';
 import thunk from 'redux-thunk';
+import createLogger from 'redux-logger';
+import {persistStore, autoRehydrate} from 'redux-persist';
+
 import reducers from '../reducers';
 import promise from './promise';
 
-var isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
+const isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
+const logger = createLogger({
+  predicate: (getState, action) => isDebuggingInChrome,
+  collapsed: true,
+  duration: true,
+});
 
-const createCBStore = applyMiddleware(thunk, promise)(createStore);
+const createCBStore = applyMiddleware(thunk, promise, logger)(createStore);
 
-const configureStore = () => {
-  console.log(reducers);  
-  
-  const store = createCBStore(reducers);
-  
+const configureStore = (onComplete) => {
+  const store = autoRehydrate()(createCBStore)(reducers);
+  persistStore(store, {storage: AsyncStorage}, onComplete);
+
   if (isDebuggingInChrome) {
     window.store = store;
   }

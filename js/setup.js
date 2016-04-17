@@ -13,12 +13,16 @@ const setup = () => {
     constructor() {
       super();
       this.state = {
-        store: configureStore()
+        isLoading: true,
+        store: configureStore(() => this.setState({isLoading: false}))
       };
     }
     
     render() {
-      console.log(this.state.store.getState());
+      if (this.state.isLoading) {
+        return null;
+      }
+      
       return (
         <Provider store={this.state.store}>
           <CBApp />
