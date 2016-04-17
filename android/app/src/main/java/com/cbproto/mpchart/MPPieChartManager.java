@@ -2,13 +2,17 @@ package com.cbproto.mpchart;
 
 import android.graphics.Color;
 
+import android.graphics.Typeface;
+import com.cbproto.mpchart.utils.Helpers;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.uimanager.annotations.ReactProp;
-import com.facebook.react.uimanager.SimpleViewManager;
 import com.facebook.react.uimanager.ThemedReactContext;
 
 import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.formatter.DefaultValueFormatter;
+import com.github.mikephil.charting.formatter.PercentFormatter;
+import com.github.mikephil.charting.formatter.StackedValueFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.components.Legend;
@@ -19,9 +23,11 @@ import com.github.mikephil.charting.data.Entry;
 
 import java.util.ArrayList;
 
-public class MPPieChartManager extends SimpleViewManager<PieChart> {
+public class MPPieChartManager extends MPPieRadarChartBase<PieChart> {
     private String CLASS_NAME="MPPieChart";
-    private ArrayList<String> mLabels = new ArrayList<>();
+
+    private String[] mLabels = null;
+    private ValueFormatter mValueFormatter = null;
 
     @Override
     public String getName() {
@@ -35,96 +41,71 @@ public class MPPieChartManager extends SimpleViewManager<PieChart> {
     }
 
     @ReactProp(name="config")
-    public void setConfig(PieChart chart, ReadableMap rm) {
-        if (rm.hasKey("highlightPerTapEnabled")) {
-            boolean highlightPerTapEnabled = rm.getBoolean("highlightPerTapEnabled");
-            chart.setHighlightPerTapEnabled(highlightPerTapEnabled || true);
+    public void setConfig(PieChart chart, ReadableMap config) {
+        super.setPieRadarChartBaseProps(chart, config);
+
+        if (config.hasKey("holeColor")) {
+            chart.setHoleColor(Color.parseColor(config.getString("holeColor")));
         }
 
-        if (rm.hasKey("animateY")) {
-            ReadableMap animateY = rm.getMap("animateY");
-            int duration = 1400;
-            Easing.EasingOption easing = Easing.EasingOption.EaseInOutQuad;
-
-            if (animateY.hasKey("duration")) duration = animateY.getInt("duration");
-            if (animateY.hasKey("easing")) easing = Easing.EasingOption.valueOf(animateY.getString("easing"));
-
-            chart.animateY(duration, easing);
+        if (config.hasKey("drawHoleEnabled")) {
+            chart.setDrawHoleEnabled(config.getBoolean("drawHoleEnabled"));
         }
 
-        if (rm.hasKey("usePercentValues")) {
-            boolean usePercentValues = rm.getBoolean("usePercentValues");
-            chart.setUsePercentValues(usePercentValues);
+        if (config.hasKey("centerText")) {
+            chart.setCenterText(config.getString("centerText"));
         }
 
-        if (rm.hasKey("labels")) {
-            ReadableArray labels = rm.getArray("labels");
-            setLabels(chart, labels);
+        if (config.hasKey("drawCenterTextEnabled")) {
+            chart.setDrawCenterText(config.getBoolean("drawCenterTextEnabled"));
         }
 
-        if (rm.hasKey("description")) {
-            String description = rm.getString("description");
-            chart.setDescription(description);
+        if (config.hasKey("holeRadiusPercent")) {
+            chart.setHoleRadius((float)config.getDouble("holeRadiusPercent"));
         }
 
-        if (rm.hasKey("centerText")) {
-            String centerText = rm.getString("centerText");
-            chart.setCenterText(centerText);
+        if (config.hasKey("transparentCircleRadiusPercent")) {
+            chart.setTransparentCircleRadius((float)config.getDouble("transparentCircleRadiusPercent"));
         }
 
-        String description = "";
-        if (rm.hasKey("description")) {
-            description = rm.getString("description");
-        }
-        chart.setDescription(description);
-
-        if (rm.hasKey("legend")) {
-            ReadableMap legend = rm.getMap("legend");
-            setLegend(chart, legend);
+        if (config.hasKey("drawSliceTextEnabled")) {
+            chart.setDrawSliceText(config.getBoolean("drawSliceTextEnabled"));
         }
 
-        if (rm.hasKey("dataSets")) {
-            ReadableArray dataSets = rm.getArray("dataSets");
-            for (int i = 0; i < dataSets.size(); i++) {
-                this.setDataSets(chart, dataSets.getMap(i));
+        if (config.hasKey("usePercentValuesEnabled")) {
+            chart.setUsePercentValues(config.getBoolean("usePercentValuesEnabled"));
+        }
+
+        if (config.hasKey("centerTextRadiusPercent")) {
+            chart.setCenterTextRadiusPercent((float)config.getDouble("centerTextRadiusPercent"));
+        }
+
+        if (config.hasKey("maxAngle")) {
+            chart.setMaxAngle((float)config.getDouble("maxAngle"));
+        }
+
+        if (config.hasKey("labels")) {
+            mLabels = Helpers.ToStringArray(config.getArray("labels"));
+        }
+
+        if (config.hasKey("valueFormatter")) {
+            mValueFormatter = getFormatter(config.getMap("valueFormatter"));
+        }
+
+        if (config.hasKey("dataSets")) {
+            ReadableArray dataSetsArr = config.getArray("dataSets");
+            PieData data = new PieData(this.mLabels);
+
+            for (int i = 0; i < dataSetsArr.size(); i++) {
+                PieDataSet dataSet = this.getDataSet(dataSetsArr.getMap(i));
+                data.addDataSet(dataSet);
             }
+
+            chart.setData(data);
         }
     }
 
-    private void setLegend(PieChart chart, ReadableMap v){
-        Legend legend = chart.getLegend();
-
-        if(v.hasKey("enable")) legend.setEnabled(v.getBoolean("enable"));
-
-        legend.setPosition(LegendPosition.ABOVE_CHART_RIGHT);
-        legend.setWordWrapEnabled(true);
-        //if(v.hasKey("position")) legend.setPosition(Legend.LegendPosition.valueOf(v.getString("position")));
-        //if(v.hasKey("direction")) legend.setDirection(Legend.LegendDirection.valueOf(v.getString("direction")));
-
-        //if(v.hasKey("legendForm"))  legend.setForm(Legend.LegendForm.valueOf(v.getString("legendForm")));
-
-        if(v.hasKey("textColor"))  legend.setTextColor(Color.parseColor(v.getString("textColor")));
-        if(v.hasKey("textSize"))  legend.setTextSize((float) v.getDouble("textSize"));
-        if(v.hasKey("xOffset"))  legend.setXOffset((float) v.getDouble("xOffset"));
-        if(v.hasKey("yOffset"))  legend.setYOffset((float) v.getDouble("yOffset"));
-
-        if(v.hasKey("custom")) {
-            ReadableMap custom = v.getMap("custom");
-            ReadableArray colors = custom.getArray("colors");
-            ReadableArray labels = custom.getArray("labels");
-            if(colors.size() == labels.size()) {
-                int[] cols = new int[colors.size()];
-                String[] labs = new String[colors.size()];
-                for (int j = 0; j < colors.size(); j++) {
-                    cols[j] = Color.parseColor(colors.getString(j));
-                    labs[j] = labels.getString(j);
-                }
-                legend.setCustom(cols,labs);
-            }
-        }
-    }
-
-    private void setDataSets(PieChart chart, ReadableMap rm) {
+    private PieDataSet getDataSet(ReadableMap rm) {
         String label = rm.getString("label");
         ReadableArray values = rm.getArray("values");
 
@@ -136,6 +117,14 @@ public class MPPieChartManager extends SimpleViewManager<PieChart> {
 
         PieDataSet dataSet = new PieDataSet(dataEntries, label);
 
+        if (rm.hasKey("sliceSpace")) {
+            dataSet.setSliceSpace((float)rm.getDouble("sliceSpace"));
+        }
+
+        if (rm.hasKey("selectionShift")) {
+            dataSet.setSelectionShift((float) rm.getDouble("selectionShift"));
+        }
+
         if (rm.hasKey("colors")) {
             ReadableArray colors = rm.getArray("colors");
             int[] colorValues = new int[colors.size()];
@@ -146,90 +135,37 @@ public class MPPieChartManager extends SimpleViewManager<PieChart> {
             dataSet.setColors(colorValues);
         }
 
-        if (rm.hasKey("valueFormatter")) {
-            dataSet.setValueFormatter(getFormatter(rm.getMap("valueFormatter")));
+        if (rm.hasKey("drawValues")) {
+            dataSet.setDrawValues(rm.getBoolean("drawValues"));
         }
 
-        PieData data = new PieData(this.mLabels, dataSet);
-        chart.setData(data);
+        if (rm.hasKey("highlightEnabled")) {
+            dataSet.setHighlightEnabled(rm.getBoolean("highlightEnabled"));
+        }
+
+        if (rm.hasKey("valueTextFontName")) {
+            dataSet.setValueTypeface(Typeface.create(rm.getString("valueTextFontName"), Typeface.NORMAL));
+        }
+
+        if (rm.hasKey("valueTextFontSize")) {
+            dataSet.setValueTextSize((float)rm.getDouble("valueTextFontSize"));
+        }
+
+        if (rm.hasKey("valueTextColor")) {
+            dataSet.setValueTextColor(Color.parseColor(rm.getString("valueTextColor")));
+        }
+
+        if (mValueFormatter != null) {
+            dataSet.setValueFormatter(mValueFormatter);
+        }
+
+        return dataSet;
     }
 
-    // TODO
-    private ValueFormatter getFormatter(ReadableMap valueFormatterRM) {
+    // TODO: Not implemented yet
+    private ValueFormatter getFormatter(ReadableMap rm) {
         ValueFormatter valueFormatter = null;
 
-        int minimumDecimalPlaces;
-        int maximumDecimalPlaces;
-
-        if (valueFormatterRM.hasKey("minimumDecimalPlaces")) {
-            minimumDecimalPlaces = valueFormatterRM.getInt("minimumDecimalPlaces");
-        }
-        if (valueFormatterRM.hasKey("maximumDecimalPlaces")) {
-            maximumDecimalPlaces = valueFormatterRM.getInt("maximumDecimalPlaces");
-        }
-
-//        if (valueFormatterRM.hasKey("type")) {
-//            switch(valueFormatterRM.getString("type")) {
-//                case "regular":
-//                    valueFormatter = NSNumberFormatter();
-//                    break;
-//                case "abbreviated":
-//                    valueFormatter = ABNumberFormatter(minimumDecimalPlaces, maximumDecimalPlaces);
-//                    break;
-//                default:
-//                    valueFormatter = NSNumberFormatter();
-//            }
-//        }
-//
-//        if (valueFormatter!= null && valueFormatterRM.hasKey("type")) {
-//            switch(valueFormatterRM.getString("numberStyle")) {
-//                case "CurrencyAccountingStyle":
-//                    valueFormatter.numberStyle =.CurrencyAccountingStyle;
-//                    break;
-//                case "CurrencyISOCodeStyle":
-//                    valueFormatter.numberStyle =.CurrencyISOCodeStyle;
-//                    break;
-//                case "CurrencyPluralStyle":
-//                    valueFormatter.numberStyle =.CurrencyPluralStyle;
-//                    break;
-//                case "CurrencyStyle":
-//                    valueFormatter.numberStyle =.CurrencyStyle;
-//                    break;
-//                case "DecimalStyle":
-//                    valueFormatter.numberStyle = DecimalStyle;
-//                    break;
-//                case "NoStyle":
-//                    valueFormatter.numberStyle =.NoStyle;
-//                    break;
-//                case "OrdinalStyle":
-//                    valueFormatter.numberStyle =.OrdinalStyle;
-//                    break;
-//                case "PercentStyle":
-//                    valueFormatter.numberStyle =.PercentStyle;
-//                    break;
-//                case "ScientificStyle":
-//                    valueFormatter.numberStyle =.ScientificStyle;
-//                    break;
-//                case "SpellOutStyle":
-//                    valueFormatter.numberStyle =.SpellOutStyle;
-//                    break;
-//                default:
-//                    valueFormatter.numberStyle =.NoStyle;
-//            }
-//        }
-//
-//        if (valueFormatter != null) {
-//            valueFormatter.minimumFractionDigits = minimumDecimalPlaces;
-//            valueFormatter.maximumFractionDigits = maximumDecimalPlaces;
-//        }
-
         return valueFormatter;
-    }
-
-    private void setLabels(PieChart chart, ReadableArray v){
-        this.mLabels = new ArrayList<String>(v.size());
-        for (int i = 0; i < v.size(); i++) {
-            this.mLabels.add(v.getString(i));
-        }
     }
 }

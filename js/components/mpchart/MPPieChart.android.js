@@ -34,24 +34,26 @@ class MPPieChart extends Component {
 }
 
 MPPieChart.propTypes = {
-  ...globalCommonProps,
-  ...pieRadarCommonProps,
   config: React.PropTypes.shape({
+    ...globalCommonProps,
+    ...pieRadarCommonProps,
     dataSets: React.PropTypes.arrayOf(React.PropTypes.shape({
-        ...commonDataSetProps,
-        // sliceSpace: React.PropTypes.number,
-        // selectionShift: React.PropTypes.number
+      ...commonDataSetProps,
+      sliceSpace: React.PropTypes.number,
+      selectionShift: React.PropTypes.number
     })),
-    labels: React.PropTypes.arrayOf(React.PropTypes.string),
+    holeColor: React.PropTypes.string,
+    holeTransparent: React.PropTypes.bool,
+    holeAlpha: React.PropTypes.number,
+    drawHoleEnabled: React.PropTypes.bool,
     centerText: React.PropTypes.string,
-
-
-    // holeColor: React.PropTypes.string,
-    // drawHoleEnabled: React.PropTypes.bool,
-    // drawCenterTextEnabled: React.PropTypes.bool,
-    // holeRadiusPercent: React.PropTypes.number,
-    // transparentCircleRadiusPercent: React.PropTypes.number,
-    // maxAngle: React.PropTypes.number
+    drawCenterTextEnabled: React.PropTypes.bool,
+    holeRadiusPercent: React.PropTypes.number,
+    transparentCircleRadiusPercent: React.PropTypes.number,
+    drawSliceTextEnabled: React.PropTypes.bool,
+    usePercentValuesEnabled: React.PropTypes.bool,
+    centerTextRadiusPercent: React.PropTypes.number,
+    maxAngle: React.PropTypes.number
   })
 };
 
