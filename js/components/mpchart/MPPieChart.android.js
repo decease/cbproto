@@ -1,9 +1,7 @@
 import React, {
   requireNativeComponent,
   Component,
-  PropTypes,
-  View,
-  Text
+  PropTypes
 } from 'react-native';
 
 import {
@@ -27,8 +25,10 @@ class MPPieChart extends Component {
     let {config, ...otherProps} = this.props;
     config = processColors(config);
 
+    console.log(config);
+
     return <MPPieChartComponent
-      config={JSON.stringify(config) }
+      config={config}
       {...otherProps}/>;
   }
 }

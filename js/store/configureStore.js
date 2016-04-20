@@ -9,6 +9,7 @@ import reducers from '../reducers';
 import promise from './promise';
 
 const isDebuggingInChrome = __DEV__ && !!window.navigator.userAgent;
+
 const logger = createLogger({
   predicate: (getState, action) => isDebuggingInChrome,
   collapsed: true,
@@ -18,9 +19,12 @@ const logger = createLogger({
 const createCBStore = applyMiddleware(thunk, promise, logger)(createStore);
 
 const configureStore = (onComplete) => {
-  const store = autoRehydrate()(createCBStore)(reducers);
-  persistStore(store, {storage: AsyncStorage}, onComplete);
-
+  //const store = autoRehydrate()(createCBStore)(reducers);
+  //persistStore(store, {storage: AsyncStorage}, onComplete);
+  
+  const store = createCBStore(reducers);
+  setTimeout(() => onComplete(), 10);
+  
   if (isDebuggingInChrome) {
     window.store = store;
   }

@@ -41,59 +41,59 @@ public class MPPieChartManager extends MPPieRadarChartBase<PieChart> {
     }
 
     @ReactProp(name="config")
-    public void setConfig(PieChart chart, ReadableMap config) {
-        super.setPieRadarChartBaseProps(chart, config);
+    public void setConfig(PieChart chart, ReadableMap rm) {
+        super.setPieRadarChartBaseProps(chart, rm);
 
-        if (config.hasKey("holeColor")) {
-            chart.setHoleColor(Color.parseColor(config.getString("holeColor")));
+        if (rm.hasKey("holeColor")) {
+            chart.setHoleColor(Color.parseColor(rm.getString("holeColor")));
         }
 
-        if (config.hasKey("drawHoleEnabled")) {
-            chart.setDrawHoleEnabled(config.getBoolean("drawHoleEnabled"));
+        if (rm.hasKey("drawHoleEnabled")) {
+            chart.setDrawHoleEnabled(rm.getBoolean("drawHoleEnabled"));
         }
 
-        if (config.hasKey("centerText")) {
-            chart.setCenterText(config.getString("centerText"));
+        if (rm.hasKey("centerText")) {
+            chart.setCenterText(rm.getString("centerText"));
         }
 
-        if (config.hasKey("drawCenterTextEnabled")) {
-            chart.setDrawCenterText(config.getBoolean("drawCenterTextEnabled"));
+        if (rm.hasKey("drawCenterTextEnabled")) {
+            chart.setDrawCenterText(rm.getBoolean("drawCenterTextEnabled"));
         }
 
-        if (config.hasKey("holeRadiusPercent")) {
-            chart.setHoleRadius((float)config.getDouble("holeRadiusPercent"));
+        if (rm.hasKey("holeRadiusPercent")) {
+            chart.setHoleRadius((float)rm.getDouble("holeRadiusPercent"));
         }
 
-        if (config.hasKey("transparentCircleRadiusPercent")) {
-            chart.setTransparentCircleRadius((float)config.getDouble("transparentCircleRadiusPercent"));
+        if (rm.hasKey("transparentCircleRadiusPercent")) {
+            chart.setTransparentCircleRadius((float)rm.getDouble("transparentCircleRadiusPercent"));
         }
 
-        if (config.hasKey("drawSliceTextEnabled")) {
-            chart.setDrawSliceText(config.getBoolean("drawSliceTextEnabled"));
+        if (rm.hasKey("drawSliceTextEnabled")) {
+            chart.setDrawSliceText(rm.getBoolean("drawSliceTextEnabled"));
         }
 
-        if (config.hasKey("usePercentValuesEnabled")) {
-            chart.setUsePercentValues(config.getBoolean("usePercentValuesEnabled"));
+        if (rm.hasKey("usePercentValuesEnabled")) {
+            chart.setUsePercentValues(rm.getBoolean("usePercentValuesEnabled"));
         }
 
-        if (config.hasKey("centerTextRadiusPercent")) {
-            chart.setCenterTextRadiusPercent((float)config.getDouble("centerTextRadiusPercent"));
+        if (rm.hasKey("centerTextRadiusPercent")) {
+            chart.setCenterTextRadiusPercent((float)rm.getDouble("centerTextRadiusPercent"));
         }
 
-        if (config.hasKey("maxAngle")) {
-            chart.setMaxAngle((float)config.getDouble("maxAngle"));
+        if (rm.hasKey("maxAngle")) {
+            chart.setMaxAngle((float)rm.getDouble("maxAngle"));
         }
 
-        if (config.hasKey("labels")) {
-            mLabels = Helpers.ToStringArray(config.getArray("labels"));
+        if (rm.hasKey("labels")) {
+            mLabels = Helpers.ToStringArray(rm.getArray("labels"));
         }
 
-        if (config.hasKey("valueFormatter")) {
-            mValueFormatter = getFormatter(config.getMap("valueFormatter"));
+        if (rm.hasKey("valueFormatter")) {
+            mValueFormatter = getFormatter(rm.getMap("valueFormatter"));
         }
 
-        if (config.hasKey("dataSets")) {
-            ReadableArray dataSetsArr = config.getArray("dataSets");
+        if (rm.hasKey("dataSets")) {
+            ReadableArray dataSetsArr = rm.getArray("dataSets");
             PieData data = new PieData(this.mLabels);
 
             for (int i = 0; i < dataSetsArr.size(); i++) {
@@ -129,7 +129,8 @@ public class MPPieChartManager extends MPPieRadarChartBase<PieChart> {
             ReadableArray colors = rm.getArray("colors");
             int[] colorValues = new int[colors.size()];
             for (int i = 0; i < colors.size(); i++) {
-                colorValues[i] = Color.parseColor(colors.getString(i));
+                //colorValues[i] = Color.parseColor(colors.getString(i));
+                colorValues[i] = Color.parseColor(String.format("#%06X", (0xFFFFFF & colors.getInt(i))));
             }
 
             dataSet.setColors(colorValues);
@@ -152,7 +153,7 @@ public class MPPieChartManager extends MPPieRadarChartBase<PieChart> {
         }
 
         if (rm.hasKey("valueTextColor")) {
-            dataSet.setValueTextColor(Color.parseColor(rm.getString("valueTextColor")));
+            dataSet.setValueTextColor(Color.parseColor(String.format("#%06X", (0xFFFFFF & rm.getInt("valueTextColor")))));
         }
 
         if (mValueFormatter != null) {

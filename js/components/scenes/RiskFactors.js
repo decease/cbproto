@@ -15,6 +15,7 @@ class RiskFactors extends Component {
         colors: ['rgb(197, 255, 140)', 'rgb(255, 247, 140)', 'rgb(255, 210, 141)', 'rgb(140, 235, 255)'],
         label: "Quarter Revenues 2014"
       }],
+      noDataText: "No data yet!",
       labels: ['Smoking', 'Body Mass Index', 'Alcohole Intake', 'High Blood Pressure'],
       centerText: 'Relative Contribution of Risk Factors',
       legend: {

@@ -1,5 +1,17 @@
 {
     "parser": "babel-eslint",
+    "ecmaFeatures": {
+        "spread": true,
+        "arrowFunctions": true,
+        "classes": true,
+        "destructuring": true,
+        "defaultParams": true,
+        "experimentalObjectRestSpread ": true,
+        "jsx": true,
+        "templateStrings": true,
+        "blockBindings": true,
+        "modules": true
+    },
     "rules": {
         "strict": 0
     }
